@@ -8,7 +8,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{!! $namaAplikasi !!} - Beranda</title>
+    <title>{{ $namaAplikasi }} - Beranda</title>
+    <link rel="stylesheet" href="{{ asset('vendor/bootstrap-icon/bootstrap-icons.min.css') }}">
+
 </head>
 <body>
     <h1>{{ $namaAplikasi }}</h1>
@@ -19,6 +21,8 @@
         <tr><th>MySQL</th><td>{{ $versiMysql }}</td></tr>
         <tr><th>Database</th><td>{{ $namaDatabase }}</td></tr>
     </table>
-    <script>alert(1)</script>
+    <hr>
+<i class="bi bi-house-door-fill"></i>
+    <i class="bi bi-star-fill" style="color: gold;"></i> 
 </body>
 </html>
