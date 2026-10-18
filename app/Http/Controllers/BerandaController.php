@@ -14,7 +14,9 @@ class BerandaController extends Controller
 
         return view('beranda', [
             'namaAplikasi' => config('app.name'),
-            'versiLaravel'=> app()-> version(),
+            // 'namaAplikasi' => "<script>alert(1)</script>",
+            // 'versiLaravel'=> app()-> version(),
+            'versiLaravel'=> "<script>alert(1)</script>",
             'versiPhp'=> PHP_VERSION,
             'versiMysql'=> $versiMysql,
             'namaDatabase' => DB::getDatabaseName(),
