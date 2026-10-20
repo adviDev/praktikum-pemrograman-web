@@ -21,7 +21,8 @@ class DashboardController extends Controller
             "icon"=> "bi-book-fill", "warna" => "warning",],
             ["judul"=> "KRS Aktif", "jumlah" => 842,
             "icon"=> "bi-journal-check", "warna" => "info",],
-            
+            ["judul"=> "Rata-Rata SKS per KRS", "jumlah" => 20,
+            "icon"=> "bi-journal-check", "warna" => "info",],
         ];
         $kolomKrs = [
             "nim"    => "NIM",

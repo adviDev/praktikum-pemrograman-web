@@ -6,7 +6,7 @@
     <x-page-header judul="Dashboard" deskripsi="Ringakasan data akademik(data sementara)."></x-page-header>
     <div class="row g-3 mb-4">
         @foreach ($statistik as $item)
-            <div class="col-12 col-sm-6 col-xl-3">
+            <div class="col-12 col-sm-6 col-xl-4">
                 <x-stat-card :ikon="$item['icon']" :judul="$item['judul']" :jumlah="$item['jumlah']" :warna="$item['warna']"></x-stat-card>
             </div>
         @endforeach
