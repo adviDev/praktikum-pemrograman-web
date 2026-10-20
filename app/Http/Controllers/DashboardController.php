@@ -14,18 +14,20 @@ class DashboardController extends Controller
         //
         $statistik = [
             ["judul"=> "mahasiswa", "jumlah" => 1250,
-            "icon"=> "bi-motorboard-fill", "warna" => "primary",],
+            "icon"=> "bi-mortarboard-fill", "warna" => "primary",],
             ["judul"=> "dosen", "jumlah" => 68,
             "icon"=> "bi-person-badge-fill", "warna" => "success",],
             ["judul"=> "Mata Kuliah", "jumlah" => 94,
             "icon"=> "bi-book-fill", "warna" => "warning",],
             ["judul"=> "KRS Aktif", "jumlah" => 842,
-            "icon"=> "bi-journal-fill", "warna" => "info",],
+            "icon"=> "bi-journal-check", "warna" => "info",],
             
         ];
         $kolomKrs = [
-            ["nim"=> "NIM","nama"=> "Nama Mahasiswa"],
-            ["sks"=> "SKS","status"=> "Status"],
+            "nim"    => "NIM",
+            "nama"   => "Nama Mahasiswa",
+            "sks"    => "SKS",
+            "status" => "Status",
         ];
 
         $krsTerbaru = [
