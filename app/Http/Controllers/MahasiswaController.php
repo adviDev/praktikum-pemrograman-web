@@ -35,7 +35,7 @@ class MahasiswaController extends Controller
             "nama"=> "Dewi Lestari",
             "angkatan"=> 2023,
             "email"=> "dewi.lestari@contoh.ac.id",
-            "status"=> "Cuti",],
+            "status"=> "Drop Out",],
             ["nim"=> "2401005",
             "nama"=> "Rizky Pratama",
             "angkatan"=> 2022,
@@ -43,6 +43,6 @@ class MahasiswaController extends Controller
             "status"=> "Lulus",],
             
         ];
-        return view("mahasiswa.index", [compact("kolom","mahasiswa")]);
+        return view("mahasiswa.index", compact("kolom","mahasiswa"));
     }
 }
