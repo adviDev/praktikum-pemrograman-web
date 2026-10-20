@@ -1,6 +1,5 @@
 @props(['kolom'=>[],'baris'=>[]])
 
-@php $baris =[]; @endphp
 
 <div class="table-responsive">
     <table class="table table-striped table-hover align-middle mb-0">
@@ -21,10 +20,11 @@
                             @if ($kunci === 'status')
                                 @php
                                     $warna = match($item[$kunci]){
-                                    'Aktif','Disetujui'=> 'success',
-                                    'Menunggu','Cuti'=> 'warning',
-                                    'Ditolak'=>'danger',
-                                    default=> 'secondary'};
+                                    'Aktif','Disetujui'  => 'success',
+                                    'Menunggu','Cuti'    => 'warning',
+                                    'Ditolak','Drop Out' => 'danger',
+                                    'Lulus'              => 'primary',
+                                    default              => 'secondary'};
                                 @endphp
                                 <span class="badge text-bg-{{$warna}}">{{ $item[$kunci] }}</span>
                             @else 
