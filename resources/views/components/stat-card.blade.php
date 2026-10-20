@@ -1,4 +1,4 @@
-@props(['judul','jumlah','ikon'=>'01-bar-chart','warna'=>'primary'])
+@props(['judul','jumlah', 'ikon' => 'bi-bar-chart' ,'warna'=>'primary'])
 
 <div class="card stat-card border-0 shadow-sm h-100">
     <div class="card-body d-flex align-items-center">
