@@ -21,6 +21,7 @@ class MataKuliahSeeder extends Seeder
             ['TI201','Basis Data',3],
             ['TI202','Desain Web',3],
             ['TI203','Pemrograman Web',3],
+            ['TI204','Jaringan Komputer',3],
             ['TI301','Rekayasa Perangkat Lunak',3],
             ['TI302','Pemrograman Berorientasi Objek',3],
             ['TI303','Sistem Operasi',2],
