@@ -11,6 +11,6 @@ class Dosen extends Model
     use HasFactory;
     protected $table = "dosen";
     protected $fillable = [
-        "nidn","nama","email","telepon","alamat"
+        "nidn","nama","email","telepon","alamat","jabatan_fungsional"
     ];
 }
