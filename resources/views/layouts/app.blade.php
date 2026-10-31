@@ -17,6 +17,8 @@
             @include('layouts.partials.sidebar')
 
             <main class="col-lg-9 col-xl-10 px-3 px-md-4 py-4">
+                @include('layouts.partials.flash')
+                
                 @yield('content')
 
                 <footer class="text-center text-body-secondary small mt-5">
