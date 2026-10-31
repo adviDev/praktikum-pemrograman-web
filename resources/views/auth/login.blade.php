@@ -30,6 +30,8 @@
                     <input type="checkbox" class="form-check-input" name="remember" id="remember">
                     <label for="remember" class="form-check-label">Ingat saya</label>
                 </div>
+
+                <button type="submit" class="btn btn-primary w-100">Masuk</button>
             </form>
         </div>
     </div>
