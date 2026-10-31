@@ -14,21 +14,25 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::updateOrCreate(
-            ['email' => 'dosen@siakad.test'], 
-            [
-                'name'     => 'Lindung Siswanto',
-                'password' => Hash::make('123'),
-                'role'     => 'dosen',
-            ]
-        );
-        User::updateOrCreate(
-            ['email' => 'mahasiswa@siakad.test'],
-            [
-                'name'     => 'Adytya Alviandhika',
-                'password' => Hash::make('123'),
-                'role'     => 'mahasiswa',
-            ]
-        );
+        if (app()->isProduction()){
+            $this->command?->warn("UserSeeder dilewati di production");
+            return;
+        }
+
+        $akun = [
+            ['dosen@siakad.test','Dosen Uji','Dosen@12345','dosen'],
+            ['mahasiswa@siakad.test','mahasiswa uji','Mahasiswa@12345','mahasiswa'],
+        ];
+        
+        foreach($akun as [$email,$nama,$password,$role]){
+            User::updateOrCreate(
+                ['email'=>$email],
+                [
+                    'name'=>$nama,
+                    'password'=>Hash::make($password),
+                    'role'=>$role
+                ]
+            );
+        }
     }
 }
