@@ -48,8 +48,8 @@ class LoginController extends Controller
         RateLimiter::hit($key,60);
 
         return back()
-            ->route('login')
-            ->with('error','email atau kata sandi tidak sesuai');
+            ->with('error','email atau kata sandi tidak sesuai')
+            ->onlyInput('email');
     }
 
     public function logout(Request $request): RedirectResponse
