@@ -24,7 +24,7 @@ class DosenController extends Controller
         
         return DataTables::eloquent($query)
             ->addIndexColumn()
-            ->addColumn('aksi', function (Dosen $Dosen) {
+            ->addColumn('aksi', function (Dosen $dosen) {
                 return view('dosen._aksi', compact('dosen'))->render();
             })
             ->rawColumns(['aksi'])
@@ -60,7 +60,7 @@ class DosenController extends Controller
         $dosen->update($this->validated($request, $dosen));
         
         return redirect()
-            ->route('dosen.inder')
+            ->route('dosen.index')
             ->with('success','Data dosen' . $dosen->nama . ' berhasil diperbarui.');
     }
 

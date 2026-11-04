@@ -6,7 +6,7 @@
         <a href="{{ route('dosen.edit', $dosen) }}" class="btn btn-outline-warning" title="Ubah" aria-label="Ubah {{ $dosen -> nama }}">
             <i class="bi bi-pencil-square"></i>
         </a>
-        <button type="button" class="btn btn-outline-danger btn-hapus" data-url="{{ route('dosen.destroy') }}" data-nama="{{ $dosen->nama }}" title="Hapus" aria-label="Hapus {{ $dosen -> nama }}">
+        <button type="button" class="btn btn-outline-danger btn-hapus" data-url="{{ route('dosen.destroy', $dosen, false) }}" data-nama="{{ $dosen->nama }}" title="Hapus" aria-label="Hapus {{ $dosen -> nama }}">
             <i class="bi bi-trash"></i>
         </button>
     @endif
