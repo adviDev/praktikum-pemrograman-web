@@ -6,6 +6,7 @@
     <title>@yield('title','Masuk') | {{ config('app.name') }}</title>
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap-icon/bootstrap-icons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/siakad.css') }}">
 </head>
 <body class="bg-body-tertiary">
@@ -15,5 +16,6 @@
         </div>
     </main>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
 </body>
 </html>

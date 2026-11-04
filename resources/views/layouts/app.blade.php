@@ -6,6 +6,7 @@
     <title>@yield('title','SIAKAD') | {{ config('app.name') }}</title>
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap-icon/bootstrap-icons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/siakad.css') }}">
     @stack('styles')
 </head>
@@ -28,6 +29,7 @@
         </div>
     </div>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
     @stack('script')
 </body>
 </html>
