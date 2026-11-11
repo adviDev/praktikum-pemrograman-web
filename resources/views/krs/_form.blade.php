@@ -56,10 +56,49 @@
     @enderror
 </div>
 
+<div class="mb-3">
+    <label class="form-label fw-semibold">Pilih Mata Kuliah yang Diambil</label>
+    <div class="table-responsive border rounded" style="max-height: 280px; overflow-y: auto;">
+        <table class="table table-sm table-hover align-middle mb-0">
+            <thead class="table-light sticky-top">
+                <tr>
+                    <th width="40" class="text-center">#</th>
+                    <th width="120">Kode MK</th>
+                    <th>Nama Mata Kuliah</th>
+                    <th width="80" class="text-center">SKS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $selectedMk = old('mata_kuliah_id', $krs->mataKuliah?->pluck('id')->toArray() ?? []);
+                @endphp
+                @forelse ($daftarMataKuliah as $mk)
+                    <tr>
+                        <td class="text-center">
+                            <input class="form-check-input" type="checkbox" name="mata_kuliah_id[]" value="{{ $mk->id }}" id="mk_{{ $mk->id }}"
+                                {{ in_array($mk->id, $selectedMk) ? 'checked' : '' }}>
+                        </td>
+                        <td><label for="mk_{{ $mk->id }}" class="mb-0 fw-semibold">{{ $mk->kode_mk }}</label></td>
+                        <td><label for="mk_{{ $mk->id }}" class="mb-0">{{ $mk->nama_mk }}</label></td>
+                        <td class="text-center"><span class="badge text-bg-secondary">{{ $mk->sks }}</span></td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-2">Tidak ada data mata kuliah.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    @error('mata_kuliah_id')
+        <div class="text-danger small mt-1">{{ $message }}</div>
+    @enderror
+</div>
+
 @if ($krs->exists)
 <div class="mb-3">
-    <label class="form-label">Total SKS</label>
-    <input type="text" class="form-control" value="{{ $krs->mataKuliah?->sum('sks') ?? 0 }}" readonly disabled>
-    <div class="form-text">Total SKS dihitung otomatis dari akumulasi SKS mata kuliah yang diambil.</div>
+    <label class="form-label">Total SKS Saat Ini</label>
+    <input type="text" class="form-control bg-light" value="{{ $krs->mataKuliah?->sum('sks') ?? 0 }}" readonly disabled>
+    <div class="form-text">Total SKS akan otomatis terbarui sesuai mata kuliah yang dicentang di atas.</div>
 </div>
 @endif

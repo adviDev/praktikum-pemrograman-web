@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Krs;
 use App\Models\Mahasiswa;
+use App\Models\MataKuliah;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -20,41 +21,47 @@ class KrsController extends Controller
     }
 
     public function data(): JsonResponse
-{
-    // Ambil data KRS sekaligus gandeng data relasi mahasiswanya
-    $query = Krs::with('mahasiswa')->select('krs.*');
+    {
+        $query = Krs::select('krs.*')
+            ->with('mahasiswa')
+            ->withSum('mataKuliah as total_sks', 'sks');
 
-    return DataTables::eloquent($query)
-        ->addIndexColumn()
-        // Ambil NIM dari relasi mahasiswa
-        ->addColumn('nim', function (Krs $krs) {
-            return $krs->mahasiswa?->nim ?? '-';
-        })
-        // Ambil Nama dari relasi mahasiswa
-        ->addColumn('nama', function (Krs $krs) {
-            return $krs->mahasiswa?->nama ?? '-';
-        })
-        // Hitung total SKS dari mata kuliah yang diambil
-        ->addColumn('total_sks', function (Krs $krs) {
-            return $krs->mataKuliah()->sum('sks') ?? 0;
-        })
-        // Tombol aksi (Detail, Ubah, Hapus)
-        ->addColumn('aksi', function (Krs $krs) {
-            return view('krs._aksi', compact('krs'))->render();
-        })
-        ->rawColumns(['aksi'])
-        ->toJson();
-}
+        return DataTables::eloquent($query)
+            ->addIndexColumn()
+            ->addColumn('nim', function (Krs $krs) {
+                return $krs->mahasiswa?->nim ?? '-';
+            })
+            ->addColumn('nama', function (Krs $krs) {
+                return $krs->mahasiswa?->nama ?? '-';
+            })
+            ->editColumn('total_sks', function (Krs $krs) {
+                return $krs->total_sks ?? 0;
+            })
+            ->addColumn('aksi', function (Krs $krs) {
+                return view('krs._aksi', compact('krs'))->render();
+            })
+            ->rawColumns(['aksi'])
+            ->toJson();
+    }
 
     public function create(): View
     {
         $daftarMahasiswa = Mahasiswa::orderBy('nama', 'asc')->get();
-        return view('krs.create', ['krs' => new Krs(), 'daftarMahasiswa' => $daftarMahasiswa]);
+        $daftarMataKuliah = MataKuliah::orderBy('kode_mk', 'asc')->get();
+        return view('krs.create', [
+            'krs' => new Krs(),
+            'daftarMahasiswa' => $daftarMahasiswa,
+            'daftarMataKuliah' => $daftarMataKuliah,
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
         $krs = Krs::create($this->validated($request));
+
+        if ($request->has('mata_kuliah_id')) {
+            $krs->mataKuliah()->sync($request->input('mata_kuliah_id', []));
+        }
 
         return redirect()->route('krs.index')
             ->with('success', 'Data KRS mahasiswa ' . ($krs->mahasiswa?->nama ?? '') . ' berhasil ditambahkan.');
@@ -70,17 +77,38 @@ class KrsController extends Controller
 
     public function edit(Krs $krs): View
     {
+        $krs->load('mataKuliah');
         $daftarMahasiswa = Mahasiswa::orderBy('nama')->get();
-        return view('krs.edit', compact('krs','daftarMahasiswa'));
+        $daftarMataKuliah = MataKuliah::orderBy('kode_mk', 'asc')->get();
+        return view('krs.edit', compact('krs', 'daftarMahasiswa', 'daftarMataKuliah'));
     }
 
     public function update(Request $request, Krs $krs): RedirectResponse
     {
         $krs->update($this->validated($request, $krs));
+
+        $krs->mataKuliah()->sync($request->input('mata_kuliah_id', []));
         
         return redirect()
             ->route('krs.index')
             ->with('success', 'Data KRS mahasiswa ' . ($krs->mahasiswa?->nama ?? '') . ' berhasil diperbarui.');
+    }
+
+    public function destroy(Krs $krs): JsonResponse
+    {
+        try {
+            $krs->mataKuliah()->detach();
+            $nama = $krs->mahasiswa?->nama ?? 'mahasiswa';
+            $krs->delete();
+        } catch (QueryException $e) {
+            return response()->json([
+                'message' => 'Data KRS tidak dapat dihapus: masih dipakai data lain.',
+            ], 409);
+        }
+
+        return response()->json([
+            'message' => 'Data KRS ' . $nama . ' berhasil dihapus.',
+        ]);
     }
 
     public function validated(Request $request, ?Krs $krs = null): array
@@ -101,6 +129,8 @@ class KrsController extends Controller
             ],
             'semester'       => ['required', 'in:Ganjil,Genap'],
             'status'         => ['required', 'in:draft,diajukan,disetujui,ditolak'],
+            'mata_kuliah_id'   => ['nullable', 'array'],
+            'mata_kuliah_id.*' => ['exists:mata_kuliah,id'],
         ], [
             'mahasiswa_id.required'   => 'Mahasiswa wajib dipilih.',
             'mahasiswa_id.exists'     => 'Mahasiswa tidak valid.',
@@ -108,6 +138,7 @@ class KrsController extends Controller
             'tahun_akademik.unique'   => 'Mahasiswa ini sudah memiliki KRS pada tahun akademik dan semester tersebut.',
             'semester.required'       => 'Semester wajib dipilih.',
             'status.required'         => 'Status wajib dipilih.',
+            'mata_kuliah_id.*.exists' => 'Mata kuliah yang dipilih tidak valid.',
         ]);
     }
 }
