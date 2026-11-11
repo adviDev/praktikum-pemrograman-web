@@ -1,34 +1,41 @@
-<form action="#" method="post">
-    @csrf
-    <div class="row g-3">
-        <div class="col-md-4">
-            <x-form-input label="NIM" name="nim"/>
-        </div>
-        <div class="col-md-8">
-            <x-form-input label="Nama Lengkap" name="nama"/>
-        </div>
-        <div class="col-md-6">
-            <x-form-input label="Email" name="email" type="email"/>
-        </div>
-        <div class="col-md-3">
-            <x-form-input label="Angkatan" name="angkatan" type="number"/>
-        </div>
-        <div class="col-md-3">
-            <label for="status" class="form-label">Status</label>
-            <select name="status" id="status" class="form-select">
-                <option value="">Aktif</option>
-                <option value="">Cuti</option>
-                <option value="">Lulus</option>                
-            </select>
-        </div>
-        <div class="col-12">
-            <label for="alamat" class="form-label">Alamat</label>
-            <textarea name="alamat" id="alamat" rows="2" class="form-control"></textarea>
-        </div>
+<div class="mb-3">
+    <x-form-input label="NIM" name="nim" :value="$mahasiswa->nim" maxlength="15" required autofocus/>
+</div>
+<div class="mb-3">
+    <x-form-input label="Nama mahasiswa" name="nama" :value="$mahasiswa->nama" maxlength="120" required/>
+</div>
+<div class="mb-3">
+    <x-form-input label="Email" 
+    type="email" name="email" :value="$mahasiswa->email" maxlength="120" required/>
+</div>
+<div class="mb-3">
+    <label class="form-label d-block">Jenis Kelamin</label>
+    
+    <div class="form-check form-check-inline">
+        <input class="form-check-input @error('jenis_kelamin') is-invalid @enderror" 
+               type="radio" 
+               name="jenis_kelamin" 
+               id="jk_l" 
+               value="L" 
+               {{ old('jenis_kelamin', $mahasiswa->jenis_kelamin ?? 'L') === 'L' ? 'checked' : '' }} required>
+        <label class="form-check-label" for="jk_l">Laki-laki</label>
     </div>
-    <div class="mt-3 d-flex gap-2">
-        <button type="button" class="btn btn-primary" data-bs-toggle="collapse" 
-    data-bs-target="#formMahasiswa">Simpan</button>
-        <button type="reset" class="btn btn-outline-secondary">Reset</button>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input @error('jenis_kelamin') is-invalid @enderror" 
+               type="radio" 
+               name="jenis_kelamin" 
+               id="jk_p" 
+               value="P" 
+               {{ old('jenis_kelamin', $mahasiswa->jenis_kelamin) === 'P' ? 'checked' : '' }} required>
+        <label class="form-check-label" for="jk_p">Perempuan</label>
     </div>
-</form>
+    @error('jenis_kelamin')
+        <div class="invalid-feedback d-block">{{ $message }}</div>
+    @enderror
+</div>
+<div class="mb-3">
+    <x-form-input label="angkatan" name="angkatan" :value="$mahasiswa->angkatan" maxlength="10" required/>
+</div>
+<div class="mb-3">
+    <x-form-input label="Program Studi" name="program_studi" :value="$mahasiswa->program_studi" maxlength="50" required/>
+</div>

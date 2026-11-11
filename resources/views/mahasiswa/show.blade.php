@@ -3,48 +3,36 @@
 @section('title', 'Detail Mahasiswa')
 
 @section('content')
-    <x-page-header judul="Detail Mahasiswa" deskripsi="Informasi lengkap data mahasiswa.">
-        <a href="{{ route('mahasiswa.index') }}" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Kembali
-        </a>
-    </x-page-header>
 
-    <div class="row justify-content-center">
-        <div class="col-12 col-lg-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-body fw-semibold">
-                    Profil Mahasiswa
-                </div>
-                <div class="card-body">
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4 text-body-secondary">NIM</dt>
-                        <dd class="col-sm-8 fw-semibold">{{ $detail['nim'] }}</dd>
+    <x-page-header judul="Detail Mahasiswa" deskripsi="Informasi lengkap satu mahasiswa"/>
 
-                        <dt class="col-sm-4 text-body-secondary">Nama Lengkap</dt>
-                        <dd class="col-sm-8">{{ $detail['nama'] }}</dd>
-
-                        <dt class="col-sm-4 text-body-secondary">Angkatan</dt>
-                        <dd class="col-sm-8">{{ $detail['angkatan'] }}</dd>
-
-                        <dt class="col-sm-4 text-body-secondary">Email</dt>
-                        <dd class="col-sm-8">{{ $detail['email'] }}</dd>
-
-                        <dt class="col-sm-4 text-body-secondary">Status</dt>
-                        <dd class="col-sm-8">
-                            @php
-                                $warna = match($detail['status']) {
-                                    'Aktif','Disetujui'  => 'success',
-                                    'Menunggu','Cuti'    => 'warning',
-                                    'Ditolak','Drop Out' => 'danger',
-                                    'Lulus'              => 'primary',
-                                    default              => 'secondary',
-                                };
-                            @endphp
-                            <span class="badge text-bg-{{ $warna }}">{{ $detail['status'] }}</span>
-                        </dd>
-                    </dl>
-                </div>
-            </div>
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-body fw-semibold">
+            {{ $mahasiswa->nama }}
+        </div>
+        <div class="card-body">
+            <dl class="row mb-3">
+                <dt class="col-sm-3">NIM</dt>
+                <dd class="col-sm-9">{{ $mahasiswa->nim }}</dd>
+                <dt class="col-sm-3">Nama</dt>
+                <dd class="col-sm-9">{{ $mahasiswa->nama }}</dd>
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">{{ $mahasiswa->email }}</dd>
+                <dt class="col-sm-3">Jenis Kelamin</dt>
+                <dd class="col-sm-9">{{ $mahasiswa->jenis_kelamin==='L' ? 'Laki-laki' : 'Perempuan' }}</dd>
+                <dt class="col-sm-3">Angkatan</dt>
+                <dd class="col-sm-9">{{ $mahasiswa->angkatan }}</dd>
+                <dt class="col-sm-3">Program Studi</dt>
+                <dd class="col-sm-9">{{ $mahasiswa->program_studi }}</dd>
+            </dl>
+            <a class="btn btn-outline-secondary" href="{{ route('mahasiswa.index') }}">
+                <i class="bi bi-arrow-left"></i> Kembali
+            </a>
+            @if (Auth::user()->role==='admin')
+                <a class="btn btn-warning" href="{{ route('mahasiswa.edit',$mahasiswa) }}">
+                    <i class="bi bi-pencil-square"></i> Ubah
+                </a>
+            @endif
         </div>
     </div>
 @endsection
