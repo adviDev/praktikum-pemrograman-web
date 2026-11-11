@@ -60,7 +60,7 @@ class MahasiswaController extends Controller
         
         return redirect()
             ->route('mahasiswa.index')
-            ->with('success','Data mahasiswa' . $mahasiswa->nama . ' berhasil diperbarui.');
+            ->with('success','Data mahasiswa ' . $mahasiswa->nama . ' berhasil diperbarui.');
     }
 
     public function destroy(Mahasiswa $mahasiswa): JsonResponse
