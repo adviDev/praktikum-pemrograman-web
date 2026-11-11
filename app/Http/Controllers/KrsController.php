@@ -12,9 +12,10 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-
+use Illuminate\Support\Facades\Validator;
 class KrsController extends Controller
 {
+    const MAX_SKS = 24;
     public function index():View
     {
         return view("krs.index");
@@ -113,32 +114,28 @@ class KrsController extends Controller
 
     public function validated(Request $request, ?Krs $krs = null): array
     {
-        return $request->validate([
-            'mahasiswa_id'   => ['required', 'exists:mahasiswa,id'],
-            'tahun_akademik' => [
-                'required',
-                'string',
-                'max:9',
-                Rule::unique('krs')
-                    ->where(fn ($query) => $query
-                        ->where('mahasiswa_id', $request->mahasiswa_id)
-                        ->where('tahun_akademik', $request->tahun_akademik)
-                        ->where('semester', $request->semester)
-                    )
-                    ->ignore($krs?->id),
-            ],
-            'semester'       => ['required', 'in:Ganjil,Genap'],
-            'status'         => ['required', 'in:draft,diajukan,disetujui,ditolak'],
+        $validator = Validator::make($request->all(), [
+            'mahasiswa_id'     => ['required', 'exists:mahasiswa,id'],
+            'tahun_akademik'   => ['required', 'string', 'max:9'],
+            'semester'         => ['required', 'in:Ganjil,Genap'],
+            'status'           => ['required', 'in:draft,diajukan,disetujui,ditolak'],
             'mata_kuliah_id'   => ['nullable', 'array'],
             'mata_kuliah_id.*' => ['exists:mata_kuliah,id'],
-        ], [
-            'mahasiswa_id.required'   => 'Mahasiswa wajib dipilih.',
-            'mahasiswa_id.exists'     => 'Mahasiswa tidak valid.',
-            'tahun_akademik.required' => 'Tahun akademik wajib diisi.',
-            'tahun_akademik.unique'   => 'Mahasiswa ini sudah memiliki KRS pada tahun akademik dan semester tersebut.',
-            'semester.required'       => 'Semester wajib dipilih.',
-            'status.required'         => 'Status wajib dipilih.',
-            'mata_kuliah_id.*.exists' => 'Mata kuliah yang dipilih tidak valid.',
         ]);
+        $validator->after(function ($validator) use ($request) {
+            $selectedIds = $request->input('mata_kuliah_id', []);
+            if (!empty($selectedIds)) {
+                // Hitung total SKS mata kuliah yang dipilih dari database
+                $totalSks = MataKuliah::whereIn('id', $selectedIds)->sum('sks');
+                // Cek apakah melebihi batas
+                if ($totalSks > self::MAX_SKS) {
+                    $validator->errors()->add(
+                        'mata_kuliah_id', 
+                        "Total SKS yang diambil ({$totalSks} SKS) melebihi batas maksimum " . self::MAX_SKS . " SKS per semester."
+                    );
+                }
+            }
+        });
+        return $validator->validate();
     }
 }

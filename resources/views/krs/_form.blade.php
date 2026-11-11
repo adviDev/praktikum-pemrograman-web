@@ -91,8 +91,10 @@
         </table>
     </div>
     @error('mata_kuliah_id')
-        <div class="text-danger small mt-1">{{ $message }}</div>
-    @enderror
+    <div class="alert alert-danger mt-2 py-2">
+        <i class="bi bi-exclamation-triangle-fill me-1"></i> {{ $message }}
+    </div>
+@enderror
 </div>
 
 @if ($krs->exists)
