@@ -29,6 +29,7 @@ Route::middleware("auth")->group(function () {
     Route::get('/dosen/data',[DosenController::class,'data'])->name('dosen.data');
     Route::get('/mahasiswa/data',[MahasiswaController::class,'data'])->name('mahasiswa.data');
     Route::get('/matakuliah/data',[MatakuliahController::class,'data'])->name('matakuliah.data');
+    Route::get('/krs/data',[KrsController::class,'data'])->name('krs.data');
 
     Route::middleware('role:admin')->group(function(){
         Route::resource('dosen',DosenController::class)
@@ -36,6 +37,9 @@ Route::middleware("auth")->group(function () {
         Route::resource('mahasiswa', MahasiswaController::class)
             ->except(['index','show']);
         Route::resource('matakuliah', MatakuliahController::class)
+            ->except(['index','show']);
+        Route::resource('krs', KrsController::class)
+            ->parameters(['krs' => 'krs'])
             ->except(['index','show']);
     });
 
@@ -45,6 +49,7 @@ Route::middleware("auth")->group(function () {
         ->only('index','show');
     Route::resource('matakuliah', MatakuliahController::class)
         ->only('index','show');
-
-    Route::get('/krs', [KrsController::class, 'index'])->name('krs.index');
+    Route::resource('krs', KrsController::class)
+        ->parameters(['krs' => 'krs'])
+        ->only('index','show');
 });
