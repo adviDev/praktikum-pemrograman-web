@@ -28,7 +28,7 @@
                         <div class="mb-3">
                             <div class="d-flex justify-content-between small mb-1">
                                 <span>{{ $s['label'] }}</span>
-                                <span>{{ $s['persen'] }}</span>
+                                <span>{{ $s['persen'] }} %</span>
                             </div>
                             <div class="progress" role="progressbar" aria-valuenow="{{ $s['persen'] }}" aria-valuemin="0" aria-valuemax="100">
                                 <div class="progress-bar bg-{{ $s['warna'] }}" style="width: {{ $s['persen'] }}%;">
